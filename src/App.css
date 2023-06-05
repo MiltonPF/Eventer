@@ -1,0 +1,69 @@
+/* Media query para pantallas más grandes (PC) */
+.inp {
+  width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
+  
+}
+.navbar-collapse{
+  margin-top: 0%;
+}
+.nvv{
+  margin-right: 1.5%;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 992px) {
+  /* Estilos personalizados */
+.inp {
+  width: 100%; /* Establece el ancho completo por defecto */
+}
+.navbar-collapse{
+  justify-content: center;
+  float: left;
+  margin-top: 5%;
+}
+}
+@media screen and (min-width: 992px) {
+  /* Estilos personalizados */
+  .container{
+    padding-left: 24%;
+    padding-top: 2%;
+  }
+  .inp {
+    width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
+    
+  }
+  .navbar-collapse{
+    margin-top: 0%;
+  }
+  .nvv{
+    margin-right: 1.5%;
+    justify-content: space-between;
+  }
+}
+@media (min-width: 1200px) {
+  /* Estilos personalizados */
+.inp {
+  width: 700px; /* Establece el ancho completo por defecto */
+}
+
+}
+
+
+.FormLog{
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+}
+.card{
+  transition: all 0.3s;
+}
+.container{
+  padding-top: 2%;
+}
+.card:hover{
+ transform: scale(1.06);
+}
+.card{
+  margin-bottom: 7%;
+}
