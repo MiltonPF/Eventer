@@ -1,36 +1,33 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import API from './service/API';
 
-export function API() {
-    const url = "https://pokeapi.co/api/v2/pokemon"
-    const [todos, setTodos] = useState()
 
-    const fetchApi = async () => {
-        const response = await fetch(url)
-        console.log(response.status)
-        const responseJson = await response.json()
-        setTodos(responseJson)
-        console.log(responseJson)
-    }
-    useEffect(() => {
-        fetchApi()
-    }, [])
-    return (
-        <div>
-      <h1>Pokemon List</h1>
+export const InmueblesList = () => {
+  const [inmuebles, setInmuebles] = useState([]);
+
+  useEffect(() => {
+    const api = new API;
+    api.fetchInmuebles()
+      .then(data => {
+        console.log(data);
+        setInmuebles(data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  return (
+    <div>
+      <h1>Inmuebles List</h1>
       <ul>
-      {!todos ? 'Cargando...' :
-          todos.results.map((pokemon) => (
-            <li key={pokemon.id}>{pokemon.base_experience}</li>
-          ))
-        }
+        {!inmuebles ? 'Cargando...' : inmuebles.map((inmueble) => <li key={inmueble.id}>{inmueble.nombre}</li>)}
       </ul>
     </div>
-    )
-}
-
-
-
+  );
+};
 
 
 export function FormLogin() {
