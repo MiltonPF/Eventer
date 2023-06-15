@@ -42,7 +42,7 @@ export function Cards() {
   const imagenRuta = imagenR.replace(/\"/g, "");
 
   return (
-    <div className="container">
+    <div className="container-s">
       <div className="row">
         {inmuebles.length === 0 ? (
           <div>Cargando...</div>

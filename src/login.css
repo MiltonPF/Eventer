@@ -1,0 +1,154 @@
+.fondo {
+  background-color: #f2f2f2;
+  background-image: url(https://wallpapercave.com/wp/wp2506845.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container-login {
+  border: 2px solid;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 350px;
+  background: transparent;
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+  padding: 20px;
+  color: #ffffff; /* Agregado: Color de texto */
+  overflow: hidden;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 250px;
+  height: 40px;
+  margin: 12px 0;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn-login {
+  width: 100%;
+  height: 40px;
+  margin: 10px 0;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+  }
+}
+
+/** Cosas del link registrarse **/
+#login-link a{
+  text-decoration: none;
+  color: #d1d1d1;
+  font-weight: 600;
+}
+
+#login-link a:hover{
+  text-decoration: underline;
+}
+
+/* ... código CSS anterior ... */
+
+.input-container {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 7px;
+  /* ...border-bottom: 2px solid black; ... */
+}
+
+.input-container label {
+  position: absolute;
+  pointer-events: none;
+  left: 10px;
+  top: 60%;
+  transform: translateY(-18px);
+  transition: top 0.3s, font-size 0.3s;
+  font-size: 14px;
+  color: #888888;
+}
+
+/**.input-container input{
+  border: none;
+  outline: none;
+  background: transparent;
+  
+}**/
+
+
+.input-container input:focus ~ label,
+.input-container input:valid ~ label {
+  top: 0;
+  color: rgb(255, 255, 255);
+}
+
+
+.container-login.show-login .register-container {
+  position: absolute;
+  transform: translateX(600px);
+  transition: none;
+}
+.container-login.show-login .login-container{
+  transition: transform .18s ease;
+  transform: translateX(0);
+}
+
+.container-login.show-register .login-container{  
+  transition: none;
+  transform: translateX(-300px);
+  transition: none;
+}
+
+.container-login.show-register .register-container{
+  transition: transform .18s ease;
+  transform: translateX(0);
+}
+
+.register-container{
+  margin-right: 100%;
+}
+
+.container-login.show-register{
+  width: 290px;
+  height: 440px;
+}
