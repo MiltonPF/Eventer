@@ -78,13 +78,13 @@ button:hover {
 }
 
 /** Cosas del link registrarse **/
-#login-link a{
+.login-link a{
   text-decoration: none;
   color: #d1d1d1;
   font-weight: 600;
 }
 
-#login-link a:hover{
+.login-link a:hover{
   text-decoration: underline;
 }
 

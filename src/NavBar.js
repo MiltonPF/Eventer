@@ -1,45 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import {useNavigate } from 'react-router-dom';
+import Sesion_Usuario from './service/localSesion';
+
 
 function NavBar() {
-  useEffect(() => {
-    // Obtén las referencias a los elementos del DOM
-    const menuToggle = document.getElementById('btn-perfil');
-    const menu = document.getElementById('menu-vertical');
-
-    // Agrega un evento click al botón del menú
-    menuToggle.addEventListener('click', function () {
-      if (menu.style.display === 'none') {
-        menu.style.display = 'block';
-      } else {
-        menu.style.display = 'none';
-      }
-    });
-
-    return () => {
-      // Eliminar el event listener al desmontar el componente
-      menuToggle.removeEventListener('click');
-    };
-  }, []);
+  const navigate = useNavigate();
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href=" "onClick={() => { navigate('/Home');}} role="button">
           LOGO
         </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarTogglerDemo02"
-          aria-controls="navbarTogglerDemo02"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars fa-lg"></i>
+        </button> 
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <form className="d-flex" role="search">
             <input
               className="inp form-control me-2"
@@ -62,16 +39,16 @@ function NavBar() {
                 Acerca de
               </a>
             </li>
-            <li className="nav-item ">
-              <a className="nav-link" href="#" id="btn-perfil" role="button">
-                Usuario1<i className="bi bi-person-circle"></i>
+            <li className="nav-item email-link ">
+              <a className="nav-link " href="#" id="btn-perfil" role="button">
+              {Sesion_Usuario()}  <i className="bi bi-person-circle"></i>
               </a>
-              <ul className="menu-vertical" id="menu-vertical" style={{ display: "none" }}>
+              <ul className="menu-vertical" id="menu-vertical">
                 <li>
-                  <a href="#">Perfil</a>
+                  <a href=" " onClick={() => { navigate('/Perfil');}} role="button">Perfil</a>
                 </li>
                 <li>
-                  <a href="#">Otra Cosa</a>
+                  <a href="#">Texto de Ejemplo</a>
                 </li>
                 <li>
                   <a href="#">Cerrar Sesion</a>
@@ -84,5 +61,7 @@ function NavBar() {
     </nav>
   );
 }
+
+
 
 export default NavBar;

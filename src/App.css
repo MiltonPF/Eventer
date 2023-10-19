@@ -1,3 +1,9 @@
+body {
+  min-height: 100vh;
+  max-width: 100%; /* Establece un ancho máximo */
+  overflow-x: hidden; /* Oculta la barra de desplazamiento horizontal si es necesario */
+}
+
 /* Media query para pantallas más grandes (PC) */
 .inp {
   width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
@@ -6,11 +12,34 @@
 .navbar-collapse{
   margin-top: 0%;
 }
+.imgSlider{
+  background-color: red;
+}
 .nvv{
   margin-right: 1.5%;
   justify-content: space-between;
 }
 
+/*Cards*/
+.container-s{
+  margin-left: 1%;
+  margin-right: 1%;
+}
+.card{
+  margin-left: 3%;
+  margin-top: 8%;
+  margin-right: 3%;
+}
+.card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Agrega una sombra en hover */
+  transform: scale(1.05); /* Escala la tarjeta en hover */
+  transition: all 0.3s ease; /* Aplica una transición suave */
+}
+
+
+
+
+/*Medidas de Pantalla*/
 @media screen and (max-width: 992px) {
   .menu-vertical{
     width: 100%;
@@ -25,13 +54,12 @@
   float: left;
   margin-top: 5%;
 }
+
 }
 @media screen and (min-width: 992px) {
   /* Estilos personalizados */
-  .container-s{
-    padding-left: 24%;
-    padding-top: 2%;
-  }
+  
+  
   .inp {
     width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
     
@@ -42,6 +70,18 @@
   .nvv{
     margin-right: 1.5%;
     justify-content: space-between;
+  }
+  .col-titulo{
+    padding-left: 100px;
+  }
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  .footer p{
+    color: #bbb;
   }
   
 }
@@ -64,16 +104,20 @@
   padding: 0;
   justify-content: space-around;
   right: 0;
+  z-index: 3;
+  display: none;
 }
 
 .btn-perfil li:active .menu-vertical{
-  display: block;
+  
 }
 
 .menu-vertical li:hover{
   background-color: rgb(43, 42, 42);
 }
-
+.email-link:hover .menu-vertical {
+  display: block;
+}
 .menu-vertical li a{
   display: block;
   color: white;
@@ -83,4 +127,159 @@
 .menu-vertical li{
   list-style: none;
   text-decoration: none
+}
+
+/*footer*/
+
+.footer {
+  position: relative;
+  left: 0;
+  bottom: 0;
+  margin-top:4% ;
+}
+.footer p{
+  color: #bbb;
+}
+
+
+.text-footer li a{
+  
+  transition: all .3s ease;
+  text-decoration: none;
+  color: #bbb;
+}
+
+.text-footer li a:hover{
+  color: #fff;
+  padding-left: 6px;
+}
+
+.footer-socialIcons a{
+margin-left: 3%;
+display: inline-block;
+height: 40px;
+width: 40px;
+text-decoration: none;
+color: #fff;
+align-items: center;
+border-radius: 50%;
+transition: all 0.5s ease;
+}
+.footer-socialIcons a:hover{
+  color: #272727;
+  background-color: #fff;
+  }
+
+.fa-brands{
+  font-size: 150%;
+  margin-top: 20%;
+  margin-left: 25%;
+
+}
+
+
+
+
+/*Dentro del Inmueble*/
+
+.columna-c{
+  border: 1px solid #333;
+  padding: 10px;
+  background: linear-gradient(to bottom, #fff, #eee);
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  /*margin: 10px;
+  padding: 10px;*/
+}
+
+.contenedor-com{
+  margin-top: 7%;
+}
+
+
+/*Perfil*/
+
+
+.sidebar-item.active, .sidebar-item:hover {
+  background-color: #fff;
+  border: 1px solid #e6e7e9;
+  border-right: 0;
+  margin-right: -1px;
+}
+
+.sidebar-menu {
+  border-bottom: 1px solid #e6e7e9;
+  border-top: 1px solid #e6e7e9;
+  border-right: 1px solid #e6e7e9;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  background-color: #f4f4f4;
+}
+
+.sidebar-item {
+  position: relative;
+  display: block;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.sidebar-item.active:hover {
+  background-color: #fff;
+}
+
+.card .icon-big {
+  font-size: 3rem;
+}
+
+.card .icon-big .notif {
+  position: absolute;
+  min-width: 25px;
+  border-radius: 5rem;
+  font-size: 1rem;
+  background: #dc3545;
+  color: #fff;
+}
+
+.card .numbers {
+  text-align: right;
+}
+
+.card .numbers p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.card .footer {
+  padding: 0;
+  line-height: 30px;
+}
+
+.side-notif {
+  padding-left: 7px;
+  padding-right: 7px;
+  font-size: 0.8rem;
+  border-radius: 5rem;
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.statistics li {
+  padding: 0.25rem 0;
+}
+
+.member-item:hover .card {
+  background-color: #f4f4f4;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f4f4f4;
+}
+
+@media (max-width: 767.98px) {
+  .sidebar-item.active, .sidebar-item:hover {
+    border-right: 1px solid #e6e7e9;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
 }
