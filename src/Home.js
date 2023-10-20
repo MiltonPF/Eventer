@@ -27,13 +27,13 @@ export function Slider() {
   </ol>
   <div className="carousel-inner">
     <div className="carousel-item active">
-      <img className="d-block w-100" src={Slider1} style={{ height: "40rem" }} alt="First slide"/>
+      <img className="d-block w-100" src={Slider1} style={{ height: "20rem" }} alt="First slide"/>
     </div>
     <div className="carousel-item">
-      <img className="d-block w-100" src={Slider2}  style={{ height: "40rem" }} alt="Second slide"/>
+      <img className="d-block w-100" src={Slider2}  style={{ height: "20rem" }} alt="Second slide"/>
     </div>
     <div className="carousel-item">
-      <img className="d-block w-100" src={Slider4} style={{ height: "40rem" }} alt="Third slide"/>
+      <img className="d-block w-100" src={Slider4} style={{ height: "20rem" }} alt="Third slide"/>
     </div>
   </div>
   <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">

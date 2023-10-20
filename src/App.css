@@ -2,12 +2,14 @@ body {
   min-height: 100vh;
   max-width: 100%; /* Establece un ancho máximo */
   overflow-x: hidden; /* Oculta la barra de desplazamiento horizontal si es necesario */
+  /*background: linear-gradient(#4c0080, #ad33ff);*/
 }
-
 /* Media query para pantallas más grandes (PC) */
 .inp {
   width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
-  
+}
+.navbar{
+  background-color: #8c19ff;
 }
 .navbar-collapse{
   margin-top: 0%;
@@ -19,11 +21,22 @@ body {
   margin-right: 1.5%;
   justify-content: space-between;
 }
+.btn2{
+  background-color: #6b00b3;
+}
 
+/*.btn2:hover{
+  background-color: #f41303;
+  box-shadow: 0 0 5px #f41303,
+              0 0 25px #f41303,
+              0 0 50px #f41303,
+              0 0 100px #f41303;
+}*/
 /*Cards*/
 .container-s{
   margin-left: 1%;
   margin-right: 1%;
+  background-color: #f5e6ff;
 }
 .card{
   margin-left: 3%;
@@ -58,8 +71,6 @@ body {
 }
 @media screen and (min-width: 992px) {
   /* Estilos personalizados */
-  
-  
   .inp {
     width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
     
@@ -211,7 +222,7 @@ transition: all 0.5s ease;
   border-bottom: 1px solid #e6e7e9;
   border-top: 1px solid #e6e7e9;
   border-right: 1px solid #e6e7e9;
-  padding-bottom: 1rem;
+  padding-bottom: calc(40vh - 1rem);
   padding-top: 1rem;
   background-color: #f4f4f4;
 }
@@ -282,4 +293,9 @@ transition: all 0.5s ease;
     margin-left: 0.25rem;
     margin-right: 0.25rem;
   }
+}
+
+.co-2{
+  margin-left: 20rem;
+  margin-top: 10%;
 }

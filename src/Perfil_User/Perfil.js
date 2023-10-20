@@ -27,16 +27,11 @@ function Perfil(params) {
     <div>
       <div className='row'>
         <div className="col-md-3 pr-md-4">
-        <div className="" style={{ backgroundImage: 'url(https://png.pngtree.com/thumb_back/fh260/background/20210201/pngtree-colored-modern-abstract-background-image_552362.jpg)', height: '150px' }}>
-          <div className="sidebar" style={{ position: 'absolute', top: '100px', left: '20px' }}>
-              <p className='text-light'> Nombre Del Usuario</p>
-              <i className="fas fa-caret-down"></i>
+          <div className="" style={{ backgroundImage: 'url(https://png.pngtree.com/thumb_back/fh260/background/20210201/pngtree-colored-modern-abstract-background-image_552362.jpg)', height: '150px' }}>
+            <div className="sidebar" style={{ position: 'absolute', top: '100px', left: '20px' }}>
+                <p className='text-light'> Nombre Del Usuario</p>
+            </div>
           </div>
-        </div>
-      </div>
-      </div>
-      <div className="row"> 
-        <div className="col-md-3 pr-md-4">
           <div className="sidebar-left">
             <ul className="list-unstyled sidebar-menu pl-md-2 pr-md-0">
               <li>
@@ -96,10 +91,18 @@ function Perfil(params) {
             </ul>
           </div>
         </div>
-        {/* Resto del contenido del perfil */}
+        <div className="col-md-3 co-2">
+          <div className='contenido'>
+            {/*
+            <ul className='list-unstyled text-center bar-p d-flex justify-content-between'>
+              <li className="active">Caracteristicas</li>
+              <li>Descripcion</li>
+              <li>Confirmar</li>
+            </ul>*/}
+          </div>
+        </div>
       </div>
     </div>
-      
   );
 }
 

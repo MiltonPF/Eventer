@@ -8,8 +8,8 @@ function NavBar() {
   const navigate = useNavigate();
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
+    <nav className="navbar nv1 navbar-expand-lg">
+      <div className="container-fluid cf1">
         <a className="navbar-brand" href=" "onClick={() => { navigate('/Home');}} role="button">
           LOGO
         </a>
@@ -24,7 +24,7 @@ function NavBar() {
               placeholder="Buscar Propiedades..."
               aria-label="Search"
             />
-            <button className="btn btn-outline-success" type="submit">
+            <button className="btn btn2 border" type="submit">
               Buscar
             </button>
           </form>
