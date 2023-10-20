@@ -51,6 +51,11 @@ const GetComentario = (id) =>{
     params: params,
   })
 }
+const CerrarSesion = () =>{
+  return axios.post('http://localhost:8080/api/logout' , {
+    headers: authHeader(),
+  })
+}
 
 
 
@@ -61,6 +66,7 @@ const postService = {
   getInmueble,
   agregarComentario,
   GetComentario,
+  CerrarSesion,
 };
 
 export default postService;

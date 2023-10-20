@@ -21,10 +21,6 @@ function App() {
       setCurrentUser(user);
     }
   }, []);
-
-  const logOut = () => {
-    authService.logout();
-  };
       
 
     return (

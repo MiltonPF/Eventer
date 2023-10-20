@@ -2,10 +2,23 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import {useNavigate } from 'react-router-dom';
 import Sesion_Usuario from './service/localSesion';
+import postService from './service/post-service';
 
 
 function NavBar() {
   const navigate = useNavigate();
+  const [posts, setPosts] = useState([]);
+
+  const handleCerrarSesion = () => {
+    postService.CerrarSesion().then(
+      () => {
+        //navigate('/');
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
 
   return (
     <nav className="navbar nv1 navbar-expand-lg">
@@ -51,7 +64,7 @@ function NavBar() {
                   <a href="#">Texto de Ejemplo</a>
                 </li>
                 <li>
-                  <a href="#">Cerrar Sesion</a>
+                  <a href=" " onClick={handleCerrarSesion}>Cerrar Sesion</a>
                 </li>
               </ul>
             </li>

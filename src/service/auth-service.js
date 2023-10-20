@@ -31,7 +31,6 @@ const login = (email, password) => {
       }
       console.log(response.data.accessToken)
       return response.data;
-      
     });
 };
 

@@ -3,13 +3,14 @@ body {
   max-width: 100%; /* Establece un ancho máximo */
   overflow-x: hidden; /* Oculta la barra de desplazamiento horizontal si es necesario */
   /*background: linear-gradient(#4c0080, #ad33ff);*/
+  background-color: #3d2554;
 }
 /* Media query para pantallas más grandes (PC) */
 .inp {
   width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
 }
 .navbar{
-  background-color: #8c19ff;
+  background-color: #5B377D;
 }
 .navbar-collapse{
   margin-top: 0%;
@@ -298,4 +299,26 @@ transition: all 0.5s ease;
 .co-2{
   margin-left: 20rem;
   margin-top: 10%;
+}
+.perfil-pag{
+  &::before {
+    content: "";
+    position: absolute;
+    width: 123px;
+    height: 123px;
+    left: 60%;
+    top: 138px;
+    filter: blur(100px);
+    background-color: #FB37FF;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 123px;
+    height: 123px;
+    left: 40%;
+    top: 550px;
+    background-color: #172e94;
+    filter: blur(80px);
+  }
 }

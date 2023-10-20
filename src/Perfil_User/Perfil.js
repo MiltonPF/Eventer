@@ -24,7 +24,7 @@ function Perfil(params) {
   }
 
   return (
-    <div>
+    <div className='perfil-pag'>
       <div className='row'>
         <div className="col-md-3 pr-md-4">
           <div className="" style={{ backgroundImage: 'url(https://png.pngtree.com/thumb_back/fh260/background/20210201/pngtree-colored-modern-abstract-background-image_552362.jpg)', height: '150px' }}>
