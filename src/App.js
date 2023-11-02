@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import NavBar from './NavBar';
 import { Login, Rutas } from './Login';
 import { Cards, Footer, Slider } from "./Home";
@@ -12,28 +12,18 @@ import RenderizarComentario, { InmuebleHome, SeccionComentarios } from "./inmueb
 
 
 function App() {
-    const [currentUser, setCurrentUser] = useState(undefined);
-
-  useEffect(() => {
-    const user = authService.getCurrentUser();
-
-    if (user) {
-      setCurrentUser(user);
-    }
-  }, []);
-      
-
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/Home" element={<> <NavBar/> <Slider/> <Cards/> <Footer/> </>} />
-                <Route path="Perfil" element={<> <NavBar/> <Perfil/> </>} />
-                <Route path="Perfil_agregarInmueble" element={<> <NavBar/> <AgregarInmuebleForm/> </>} />
-                <Route path="InmuebleHome" element={<> <NavBar/> <InmuebleHome/> <SeccionComentarios/> </>} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<><NavBar /><Slider /><Cards /><Footer /></>} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Perfil" element={<><NavBar /><Perfil /></>} />
+        <Route path="/Perfil_agregarInmueble" element={<><NavBar /><AgregarInmuebleForm /></>} />
+        <Route path="/InmuebleHome/:inmuebleId" element={<><NavBar /><InmuebleHome /><SeccionComentarios /></>} />
+      </Routes>
+    </Router>
+  );
 }
+
 
 export default App;

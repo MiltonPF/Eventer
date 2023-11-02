@@ -13,11 +13,10 @@ export function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await authService.login(email, password).then(
+      authService.login(email, password).then(
         () => {
-          navigate("/Home");
-          
           window.location.reload();
+          navigate("/");
         },
         (error) => {
           console.log(error);
@@ -27,7 +26,7 @@ export function Login() {
       console.log(err);
     }
   };
- 
+
 
   const [showLoginForm, setShowLoginForm] = useState(true);
 
@@ -41,14 +40,19 @@ export function Login() {
 
 
 
-  return (
-    <div className="fondo">
-      <div className={`container-login ${showLoginForm ? 'show-login' : 'show-register'}`}>
-        <div className="login-container">
-          
-          <form className="form-container" onSubmit={handleLogin}>
-          <h2>Iniciar Sesion</h2>
-          <div className='input-container'>
+  return ( 
+    <div>
+    <button type="button" className="btn btn-info center-block" data-toggle="modal" data-target="#exampleModal">
+      Ingresar
+    </button>
+  
+    <div class="modal fade overlay" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div className={`modal-content container-login ${showLoginForm ? 'show-login' : 'show-register'}`}>
+          <div className="login-container">
+            <form className="form-container" onSubmit={handleLogin}>
+              <h2>Iniciar Sesión</h2>
+              <div class='input-container'>
                 <input
                   className="input-login"
                   type="email"
@@ -60,40 +64,38 @@ export function Login() {
                 <label htmlFor="email" className="email-label">
                   Correo electrónico
                 </label>
-            </div>
-            <div className='input-container'>
+              </div>
+              <div class='input-container'>
                 <input
                   className="input-login"
                   type="password"
-                  placeholder="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <label htmlFor="email" className="email-label">
+                <label htmlFor="password" className="email-label">
                   Contraseña
                 </label>
-            </div> 
-            <button className="btn-login" type="submit">Iniciar sesión</button>
-            <p className="login-link">¿No tienes una cuenta? <a href="#" onClick={handleRegisterForm}>Registrar</a></p>
-          </form>
-        </div>
-        <div className="register-container">
-          
-          <form className="form-container">
-          <h2>Registrarse</h2>
-          <div className='input-container'>
-                <input
+              </div>
+              <button className="btn-login"  type="submit">Iniciar Sesión</button>
+              <p className="login-link">¿No tienes una cuenta? <a href="#" onClick={handleRegisterForm}>Registrar</a></p>
+            </form>
+          </div>
+  
+          <div className="register-container">
+            <form className="form-container">
+              <h2>Registrarse</h2>
+              <div class='input-container'>
+                 <input
                   className="input-login"
                   type="text"
                   id="name"
                   required
                 />
-                <label htmlFor="email" className="email-label">
-                  Nombre
-                </label>
-            </div>
-            <div className='input-container'>
+                <label htmlFor="name" className="email-label">
+                  Nombre                  </label>
+                </div>
+              <div class='input-container'>
                 <input
                   className="input-login"
                   type="email"
@@ -101,26 +103,33 @@ export function Login() {
                   required
                 />
                 <label htmlFor="email" className="email-label">
-                  Correo electrónico
+                   Correo electrónico
                 </label>
+             </div>
+                <div class='input-container'>
+                  <input
+                    className="input-login"
+                    type="password"
+                    id="password"
+                    required
+                  />
+                  <label htmlFor="password" className="email-label">
+                    Contraseña
+                  </label>
+                </div>
+                <button className="btn-login" type="submit">Registrarse</button>
+                <p className="login-link">¿Ya tienes una cuenta? <a href="#" onClick={handleLoginForm}>Iniciar Sesión</a></p>
+              </form>
             </div>
-            <div className='input-container'>
-                <input
-                  className="input-login"
-                  type="password"
-                  id="password"
-                  required
-                />
-                <label htmlFor="email" className="email-label">
-                  Contraseña
-                </label>
-            </div> 
-            <button className="btn-login" type="submit">Registrarse</button>
-            <p className="login-link">¿Ya tienes una cuenta? <a href="#" onClick={handleLoginForm}>Iniciar sesión</a></p>
-          </form>
         </div>
       </div>
     </div>
+  </div>/* 
+    <div className="fondo">
+      
+        
+        
+    </div>*/
   );
 }
 /*export function ShowRegisterForm() {

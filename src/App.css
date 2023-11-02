@@ -23,9 +23,11 @@ body {
   justify-content: space-between;
 }
 .btn2{
-  background-color: #6b00b3;
+  background-color: #1ab188;
+  &:hover{
+    background-color: #1ab188;
+  }
 }
-
 /*.btn2:hover{
   background-color: #f41303;
   box-shadow: 0 0 5px #f41303,
@@ -37,7 +39,6 @@ body {
 .container-s{
   margin-left: 1%;
   margin-right: 1%;
-  background-color: #f5e6ff;
 }
 .card{
   margin-left: 3%;
@@ -139,6 +140,13 @@ body {
 .menu-vertical li{
   list-style: none;
   text-decoration: none
+}
+.btn-Ingresar{
+  background-color:  #3d2850;
+  transition:.5s ease;
+  &:hover{
+    background-color: #956bbd;
+  }
 }
 
 /*footer*/

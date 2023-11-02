@@ -29,24 +29,21 @@ const login = (email, password) => {
       if (response.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-      console.log(response.data.accessToken)
+      console.log(JSON.parse(localStorage.getItem("user")))
       return response.data;
+      
     });
 };
 
-const logout = () => {
-  localStorage.removeItem("user");
-};
+function logout() {
+  return localStorage.clear()
+}
 
-const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
-};
 
 const authService = {
   signup,
   login,
   logout,
-  getCurrentUser,
 };
 
 export default authService;

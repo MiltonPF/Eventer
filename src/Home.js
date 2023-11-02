@@ -7,6 +7,7 @@ import {useNavigate } from 'react-router-dom';
 import Slider1 from './imgHome/Slider1.jpeg';
 import Slider2 from './imgHome/Slider2.jpeg';
 import Slider4 from './imgHome/Slider4.jpeg';
+import { Link } from 'react-router-dom';
 
 
 function obtenerNombreImagen(rutaCompleta) {
@@ -52,13 +53,11 @@ export function Slider() {
 export function Cards(idInmueble) {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const user = localStorage.getItem('user');
   const [inmuebles, setInmuebles] = useState([]);
 
   useEffect(() => {
     postService.getAllInmuebles().then(
       (response) => {
-        
         setPosts(response.data);
       },
       (error) => {
@@ -83,27 +82,30 @@ export function Cards(idInmueble) {
         ) : (
           posts.map(inmueble => (
             <div className="col-12 col-md-6 col-lg-4" key={inmueble.id}>
-              <div className="card" onClick={() => { navigate('/InmuebleHome', { state: { id: inmueble.id }});}}>
-              <img src={`img/${obtenerNombreImagen(recortarUrl(inmueble.filePath))}`} style={{ height: "10rem" }} className="card-img-top" alt="" />
-                <div className="card-body">
-                  <h5 className="card-title">{inmueble.nombre}</h5>
-                  <p className="card-text">Ubicacion</p>
-                  {/*<p className="card-text">{inmueble.descripcion}</p> */}
-                </div>
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item">
-                    <i className="fa-solid fa-person"></i> Max: 4
-                  </li>
-                  <li className="list-group-item">
-                    <i className="fa-solid fa-door-open"></i> 3 amb.
-                  </li>
-                  <li className="list-group-item">
-                    <i className="fa-solid fa-person-swimming"></i> NO
-                  </li>
-                </ul>
+              <div className="card">
+               <Link to={`/InmuebleHome/${inmueble.id}`} style={{ textDecoration: 'none' }}>
+                  <img src={`img/${obtenerNombreImagen(recortarUrl(inmueble.filePath))}`} style={{ height: "10rem" }} className="card-img-top" alt="" />
+                  <div className="card-body">
+                    <h5 className="card-title"  style={{ color: 'black' }}>{inmueble.nombre}</h5>
+                    <p className="card-text"  style={{ color: 'black' }}>Ubicacion</p>
+                    {/*<p className="card-text">{inmueble.descripcion}</p> */}
+                  </div>
+                  <ul className="list-group list-group-flush">
+                    <li className="list-group-item">
+                      <i className="fa-solid fa-person"></i> Max: 4
+                    </li>
+                    <li className="list-group-item">
+                      <i className="fa-solid fa-door-open"></i> 3 amb.
+                    </li>
+                    <li className="list-group-item">
+                      <i className="fa-solid fa-person-swimming"></i> NO
+                    </li>
+                  </ul>
+                </Link>
               </div>
             </div>
           ))
+          
         )}
       </div>
     </div>

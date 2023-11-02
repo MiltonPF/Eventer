@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import postService from '../service/post-service';
 
 export default class Prov extends Component {
@@ -36,8 +36,8 @@ export default class Prov extends Component {
 
 
 export function InmuebleHome() {
-    const location = useLocation();
-  const inmuebleId = location.state.id;
+  const { inmuebleId } = useParams();
+
   const scrollToTop = () => {
     window.scrollTo(0, 0);
   };
@@ -45,22 +45,27 @@ export function InmuebleHome() {
   
   useEffect(() => {
     scrollToTop();
+    if (inmuebleId != null) {
+      postService.getInmueble(inmuebleId).then(
+        (response) => {
+          setInmuebleData(response.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log("error al hacerlo")
+    }
     // Llama a la función getInmueble pasando el inmuebleId
-    postService.getInmueble(inmuebleId).then(
-      (response) => {
-        setInmuebleData(response.data);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    
    
   }, []);
 
     return(
         <div className="container">
             <div>
-                <h1>
+                <h1 style={{ color: 'white' }}>
                     {inmuebleData.nombre} 
                 </h1>
             </div>
@@ -107,10 +112,10 @@ export function InmuebleHome() {
                 </div>
             </div>
             <div>
-                <h3 className="mt-3">Descripción</h3>
-                <p className="mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultrices gravida dictum fusce ut placerat. Vestibulum sed arcu non odio euismod lacinia at. Quis hendrerit dolor magna eget est lorem ipsum dolor. Eros donec ac odio tempor orci. Eget mauris pharetra et ultrices neque ornare. Laoreet non curabitur gravida arcu ac tortor dignissim convallis. Sed turpis tincidunt id aliquet risus feugiat in. Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Tincidunt id aliquet risus feugiat in ante. Tortor condimentum lacinia quis vel eros. Vitae sapien pellentesque habitant morbi tristique senectus et netus. Sed ullamcorper morbi tincidunt </p>
-                <p className='mt-4'>ornare massa eget. Eu non diam phasellus vestibulum lorem sed risus ultricies tristique. Duis tristique sollicitudin nibh sit amet commodo nulla. Porttitor rhoncus dolor purus non. Nunc scelerisque viverra mauris in aliquam sem fringilla ut. Mauris augue neque gravida in. Scelerisque in dictum non consectetur a erat nam at. Consequat interdum varius sit amet mattis vulputate enim nulla aliquet.</p>
-                <p className='mt-4'>Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Tincidunt id aliquet risus feugiat in ante. Tortor condimentum lacinia quis vel eros. Vitae sapien pellentesque habitant morbi tristique senectus et netus. Sed ullamcorper morbi tincidunt</p>
+                <h3 className="mt-3 text-white">Descripción</h3>
+                <p className="mt-3 text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultrices gravida dictum fusce ut placerat. Vestibulum sed arcu non odio euismod lacinia at. Quis hendrerit dolor magna eget est lorem ipsum dolor. Eros donec ac odio tempor orci. Eget mauris pharetra et ultrices neque ornare. Laoreet non curabitur gravida arcu ac tortor dignissim convallis. Sed turpis tincidunt id aliquet risus feugiat in. Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Tincidunt id aliquet risus feugiat in ante. Tortor condimentum lacinia quis vel eros. Vitae sapien pellentesque habitant morbi tristique senectus et netus. Sed ullamcorper morbi tincidunt </p>
+                <p className='mt-4 text-white'>ornare massa eget. Eu non diam phasellus vestibulum lorem sed risus ultricies tristique. Duis tristique sollicitudin nibh sit amet commodo nulla. Porttitor rhoncus dolor purus non. Nunc scelerisque viverra mauris in aliquam sem fringilla ut. Mauris augue neque gravida in. Scelerisque in dictum non consectetur a erat nam at. Consequat interdum varius sit amet mattis vulputate enim nulla aliquet.</p>
+                <p className='mt-4 text-white'>Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Tincidunt id aliquet risus feugiat in ante. Tortor condimentum lacinia quis vel eros. Vitae sapien pellentesque habitant morbi tristique senectus et netus. Sed ullamcorper morbi tincidunt</p>
             </div>
         </div>
     )
@@ -119,7 +124,8 @@ export function InmuebleHome() {
 
 export function SeccionComentarios() {
   const location = useLocation();
-  const inmuebleId = location.state.id;
+  const {inmuebleId} = useParams()
+
 
   const [comentario, setComentario] = useState({
     contenido: '',
@@ -168,11 +174,11 @@ export function SeccionComentarios() {
 
   return (
     <div className="container">
-      <div className="contenedor-com">
+      <div className="contenedor-com text-white">
         <h3>Comentarios</h3>
         <form className="mt-4" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="contenido">Deja tu Comentario:</label>
+            <label htmlFor="contenido text-white">Deja tu Comentario:</label>
             <textarea
               className="form-control"
               name="contenido"
@@ -198,9 +204,9 @@ export function SeccionComentarios() {
               <div className="media mt-2">
                 <div className="media-body">
                   <h6 className="mt-0" style={{ fontSize: '15px' }}>
-                    <i className="bi bi-person-circle"></i> {comentario.nombreUsuario}
+                    <i className="bi bi-person-circle text-white"></i> {comentario.nombreUsuario}
                   </h6>
-                  <p>{comentario.contenido}</p>
+                  <p className='text-white'>{comentario.contenido}</p>
                 </div>
               </div>
             </div>

@@ -1,18 +1,3 @@
-.fondo {
-  background-color: #f2f2f2;
-  background-image: url(https://wallpapercave.com/wp/wp2506845.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
-
 .container-login {
   border: 2px solid;
   position: relative;
@@ -28,6 +13,8 @@
   padding: 20px;
   color: #ffffff; /* Agregado: Color de texto */
   overflow: hidden;
+  left: 22%;
+  margin-top: 20%;
 }
 
 h1 {
@@ -64,7 +51,15 @@ input[type="password"] {
   color: #fff;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: .5s;
+}
+
+.btn-login:hover{
+  background-color: #0479ff;
+  box-shadow: 0 0 5px #0479ff,
+              0 0 25px #0479ff,
+              0 0 50px #0479ff,
+              0 0 100px #0479ff;
 }
 
 button:hover {
@@ -108,6 +103,10 @@ button:hover {
   color: #888888;
 }
 
+.overlay{
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
 /**.input-container input{
   border: none;
   outline: none;
@@ -145,7 +144,7 @@ button:hover {
 }
 
 .register-container{
-  margin-right: 100%;
+  margin-top: -125%;
 }
 
 .container-login.show-register{

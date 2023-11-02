@@ -51,10 +51,18 @@ const GetComentario = (id) =>{
     params: params,
   })
 }
-const CerrarSesion = () =>{
-  return axios.post('http://localhost:8080/api/logout' , {
-    headers: authHeader(),
-  })
+const CerrarSesion = () => {
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const accessToken = user && user.accessToken;
+
+  if (accessToken) {
+    return axios.post('http://localhost:8080/api/logout', null, {
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      }
+    });
+  } 
 }
 
 
