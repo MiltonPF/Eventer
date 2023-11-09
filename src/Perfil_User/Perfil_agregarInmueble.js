@@ -24,6 +24,7 @@ function AgregarInmuebleForm() {
       .then((response) => {
         // Manejar la respuesta si es necesario
         console.log("Inmueble agregado exitosamente");
+        
       })
       .catch((error) => {
         // Manejar los errores si es necesario

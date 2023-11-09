@@ -1,8 +1,8 @@
 import './login.css';
 import React, { useEffect, useState } from 'react';
 import {useNavigate } from 'react-router-dom';
-import axios, { Axios } from "axios";
 import authService from './service/auth-service';
+import postService from './service/post-service';
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -15,8 +15,8 @@ export function Login() {
     try {
       authService.login(email, password).then(
         () => {
+          postService.GetUsuario()
           window.location.reload();
-          navigate("/");
         },
         (error) => {
           console.log(error);

@@ -59,6 +59,7 @@ export function Cards(idInmueble) {
     postService.getAllInmuebles().then(
       (response) => {
         setPosts(response.data);
+        console.log(response)
       },
       (error) => {
         console.log(error);
@@ -86,8 +87,8 @@ export function Cards(idInmueble) {
                <Link to={`/InmuebleHome/${inmueble.id}`} style={{ textDecoration: 'none' }}>
                   <img src={`img/${obtenerNombreImagen(recortarUrl(inmueble.filePath))}`} style={{ height: "10rem" }} className="card-img-top" alt="" />
                   <div className="card-body">
-                    <h5 className="card-title"  style={{ color: 'black' }}>{inmueble.nombre}</h5>
-                    <p className="card-text"  style={{ color: 'black' }}>Ubicacion</p>
+                    <h5 className="card-title"  style={{ color: 'black' }}>{inmueble.titulo}</h5>
+                    <p className="card-text"  style={{ color: 'black' }}>{inmueble.localidad}</p>
                     {/*<p className="card-text">{inmueble.descripcion}</p> */}
                   </div>
                   <ul className="list-group list-group-flush">

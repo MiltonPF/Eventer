@@ -9,12 +9,24 @@ body {
 .inp {
   width: 500px; /* Cambia el ancho a 600px en pantallas más grandes */
 }
+
+/*Nav Bar*/
 .navbar{
   background-color: #5B377D;
 }
 .navbar-collapse{
   margin-top: 0%;
 }
+
+.nav-link{
+  color: rgba(255, 255, 255, 0.555);
+  &:hover{
+    color: #fff;
+  }
+}
+
+/**/
+
 .imgSlider{
   background-color: red;
 }
@@ -70,6 +82,8 @@ body {
   margin-top: 5%;
 }
 
+
+
 }
 @media screen and (min-width: 992px) {
   /* Estilos personalizados */
@@ -102,6 +116,7 @@ body {
   /* Estilos personalizados */
 .inp {
   width: 700px; /* Establece el ancho completo por defecto */
+  
 }
 
 }
@@ -119,10 +134,6 @@ body {
   right: 0;
   z-index: 3;
   display: none;
-}
-
-.btn-perfil li:active .menu-vertical{
-  
 }
 
 .menu-vertical li:hover{
@@ -305,8 +316,8 @@ transition: all 0.5s ease;
 }
 
 .co-2{
-  margin-left: 20rem;
-  margin-top: 10%;
+  margin-left: 3%;
+  margin-top: 5%;
 }
 .perfil-pag{
   &::before {
@@ -324,9 +335,120 @@ transition: all 0.5s ease;
     position: absolute;
     width: 123px;
     height: 123px;
-    left: 40%;
+    left: 30%;
     top: 550px;
     background-color: #172e94;
     filter: blur(80px);
   }
 }
+
+.contenedor {
+  width: 450%;
+}
+
+.cont-p{
+  border: 2px solid;
+  width: 100%;
+  height: 100%;
+  padding: 5%;
+  color: #ffffff;
+  box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+  border-radius: 10px;
+  background-color: #5B377D;
+}
+
+.btn-crearPost{
+  margin-left: 35%;
+  width: 30%;
+  display: inline-flex;
+  height: 40px;
+  border: 3px solid rgb(198, 65, 231);
+  padding: 10px;
+  color: #BFC0C0;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: .8em;
+  letter-spacing: 1.5px;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  overflow: hidden;
+  position: relative;
+  border-radius: 15px;
+}
+
+#dub-arrow i {
+  font-size: 24px; /* Cambia el tamaño del ícono a tu preferencia, por ejemplo, 24px */
+}
+
+.btn-crearPost:hover{
+  background-color: transparent;
+}
+
+.btn-crearPost span{
+  transition: all .35s ease-Out;
+  color: rgb(198, 65, 231);
+  text-decoration: none;
+  letter-spacing: 1px;
+  position: relative;
+  left: 0;
+}
+
+.btn-crearPost:hover span{
+  left: 100%;
+}
+
+#dub-arrow {
+  width: 100%; /* Cambia el ancho al 100% para que la flecha esté completamente dentro del botón */
+  height: 100%; /* Cambia la altura al 100% para que la flecha esté completamente dentro del botón */
+  background: rgb(198, 65, 231);
+  color: #ffffff;
+  position: absolute;
+  top: 0;
+  left: -100%; /* Oculta la flecha inicialmente */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .35s ease-out;
+}
+
+.btn-crearPost:hover #dub-arrow {
+  left: 0%;
+}
+
+/*Subir Inmueble*/
+
+
+.card-prev{
+  height: 50%;
+  border: none;
+  padding: 0%;
+  background-color: transparent
+}
+
+.card-prev i {
+  display: none;
+  position: absolute;
+  color: #f0f0f0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 600%;
+  transition: all .3s;
+  z-index: -1;
+}
+
+.card-prev:hover i {
+  display: block;
+}
+
+.prev-img{
+  transition: all .4s;
+  
+}
+
+.prev-img:hover{
+  opacity: 0.4;
+}
+

@@ -10,12 +10,13 @@ import { Login } from './Login';
 
 function NavBar() {
   const navigate = useNavigate();
+  const userName = JSON.parse(localStorage.getItem("userData"))
 
   function Usuario_S() {
-    if (Sesion_Usuario()) {
+    if (userName) {
       return  <li className="nav-item email-link ml-3">
-      <a className="nav-link text-white" href="#" id="btn-perfil">
-      {Sesion_Usuario()} <i className="bi bi-person-circle"></i>
+      <a className="nav-link" href="#" id="btn-perfil">
+      {userName.name} <i className="bi bi-person-circle"></i>
       </a> 
       <ul className="menu-vertical" id="menu-vertical">
         <li>
@@ -55,10 +56,10 @@ function NavBar() {
     <nav className="navbar nv1 navbar-expand-lg">
       <div className="container-fluid cf1">
         <Link className="navbar-brand text-white" to={`/`}>LOGO</Link>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fa-solid fa-bars fa-lg"></i>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i className="fa-solid fa-bars fa-lg"></i>
         </button> 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <form className="d-flex" role="search">
             <input
               className="inp form-control me-2"
@@ -72,12 +73,12 @@ function NavBar() {
           </form>
           <ul className="nvv navbar-nav ms-auto mb-2 mb-lg-0 btn-perfil">
             <li className="nav-item ml-3">
-              <a className="nav-link active text-white" aria-current="page" href="#">
+              <a className="nav-link is_active" aria-current="page" onClick={() => { navigate('/');}} href=" ">
                 Inicio
               </a>
             </li>
             <li className="nav-item ml-3">
-              <a className="nav-link active text-white" aria-current="page" href=" ">
+              <a className="nav-link is_active" aria-current="page" href="#">
                 Acerca de
               </a>
             </li>

@@ -10,22 +10,43 @@ const email = Sesion_Usuario();
 
 
 const getAllInmuebles = () => {
-  return axios.get(inmgetAllurl, { headers: authHeader() });
+  return axios.get(inmgetAllurl);
 };
 
 const AgregarInmueble = (nuevoInmuebleData) => {
   const params = { email };
-
   return axios.post(inmueblePost, nuevoInmuebleData, {
     headers: authHeader(),
     params: params,
   });
+
+
 };
 
-function GetUsuario(){
-  const userEmail = email
-  const params = { email };
-  return axios.get('http://localhost:8080/api/user', { headers: authHeader(), params: params, });
+const subirImagen = (files, IdInmueble) => {
+  const formData = new FormData();
+        formData.append("files", files);
+        formData.append('IdInmueble', IdInmueble);
+  console.log(formData)
+  return axios.post("http://localhost:8080/api/imagen", formData,{
+    headers: authHeader(),
+  })
+}
+
+const GetUsuario = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/user/${email}`, {
+      headers: authHeader(),
+    });
+
+    if (response.data) {
+      localStorage.setItem("userData", JSON.stringify(response.data));
+    }
+    console.log(JSON.parse(localStorage.getItem("userData")));
+    return console.log("0101");
+  } catch (error) {
+    console.error('Error al obtener los datos del usuario:', error);
+  }
 }
 
 const getInmueble = (id) => {
@@ -75,6 +96,7 @@ const postService = {
   agregarComentario,
   GetComentario,
   CerrarSesion,
+  subirImagen,
 };
 
 export default postService;
