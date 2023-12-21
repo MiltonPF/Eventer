@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import postService from '../service/post-service';
 import '../App.css';
+import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 function Perfil() {
   const navigate = useNavigate();
@@ -99,43 +101,151 @@ function Perfil() {
 
 function Perfil_Datos() {
   const userData = JSON.parse(localStorage.getItem("userData"));
+  console.log(userData)
+  const [editedUserData, setEditedUserData] = useState({
+    name: userData.name,
+    lastName : userData.lastname,
+    email: userData.email,
+    phoneNumber: userData.phoneNumber,
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleEditarClick = (e) => {
+    e.preventDefault()
+    console.log('Datos editados:', editedUserData);
+    postService.putUser(editedUserData)
+    .then((response) => {
+      new Promise(resolve => setTimeout(resolve, 2000));
+        window.location.reload();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  };
   
   return (
-    <div className='contenedor'>
-      <div className='perfil-datos cont-p'>
-      <h1>Tus Datos</h1>
-      <table align="center" cellPadding = "10">
- 
-        <tr>
-        <td>Nombre de Usuario</td>
-        <td><input type="text" value={userData.name} name="user_name" maxLength="30"/>
-        </td>
-        </tr>
-        
-        <tr>
-        <td>Correo Electrónico</td>
-        <td><input type="text" name="email" value={userData.email} maxLength="100" /></td>
-        </tr>
-          
-        
-        <tr>
-        <td>Teléfono</td>
-        <td>
-        <input type="text" name="tel" maxLength="10" />
-        </td>
-        </tr>
-        </table>
+    <div className='contenedor text-center'>
+      <div className='perfil-datos cont-p '>
+        <h1>Tus Datos</h1>
+        <div className="campo">
+          <label htmlFor="user_name">Nombre de Usuario</label>
+          <input
+            type="text"
+            id="user_name"
+            name="name"
+            value={editedUserData.name || userData.name}
+            maxLength="30"
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="campo">
+          <label htmlFor="user_lastname">Nombre de Usuario</label>
+          <input
+            type="text"
+            id="lastname"
+            name="lastName"
+            value={editedUserData.lastName || userData.lastname}
+            maxLength="30"
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="campo">
+          <label htmlFor="email">Correo Electrónico</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            value={editedUserData.email || userData.email}
+            maxLength="100"
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="campo">
+          <label htmlFor="tel">Teléfono</label>
+          <input
+            type="text"
+            id="phoneNumber"
+            name="phoneNumber"
+            value={editedUserData.phoneNumber || userData.phoneNumber}
+            maxLength="10"
+            onChange={handleInputChange}
+          />
+        </div>
+        <button
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          style={{
+            borderRadius: '8px',
+            fontSize: '20px',
+            padding: '5px 20px',
+            backgroundColor: 'green',
+            border: 'none',
+            color: 'white',
+          }}
+        >
+          Editar
+        </button>
+      </div>
+      {/* Modal */}
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body">
+              ¿Está Seguro de Editar su Perfil?
+            </div>
+            <div className="modal-footer align-center" style={{ justifyContent: "center" }}>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                Cerrar
+              </button>
+              <button type="button" className="btn btn-success" onClick={handleEditarClick}>
+                Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-  )
-  
-}
-
+  );
+};
 
 
 
 
 function Post_Casas() {
+  const [inmuebleData, setInmuebleData] = useState([]);
+
+  useEffect(() => {
+    postService.getInmuebleUser().then(
+      (response) => {
+        setInmuebleData(response.data);
+        console.log(response)
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }, []);
+
+  function recortarUrl(url) {
+    if (!url) {
+      return null;
+    }
+    const imagenCadena = JSON.stringify(url);
+    const partes = imagenCadena.split('\\');
+    const ultimaPalabra = partes[partes.length - 1];
+    const resultadoSinComillas = ultimaPalabra.replace(/["']/g, '');
+    console.log(resultadoSinComillas)
+    return resultadoSinComillas;
+  }
+
   const [chComponent, setChComponent] = useState(false);
 
   const toggleDiv = () => {
@@ -150,6 +260,8 @@ function Post_Casas() {
   const [selectedImage2, setSelectedImage2] = useState([]);
 
   const handleImageChange = (e) => {
+    const photo = e.target.files;
+    setPortada(photo);
     const file = e.target.files[0];
     console.log(file)
     if (file) {
@@ -161,8 +273,9 @@ function Post_Casas() {
     }
   };
   const handleImageChange2 = (e) => {
-    const files = Array.from(e.target.files);
-    console.log(files)
+    const photos = e.target.files;
+    setSelectedFiles(photos);
+    const files = Array.from(photos).map((file) => file);
     const imagePreviews = [];
     files.forEach((file) => {
       const reader = new FileReader();
@@ -180,83 +293,156 @@ function Post_Casas() {
     const updatedImages = [...selectedImage2];
     updatedImages.splice(indiceImg, 1);
     setSelectedImage2(updatedImages);
+    const nuevasImagenes = [...selectedFiles];
+    nuevasImagenes.splice(indiceImg, 1);
+    setSelectedFiles(nuevasImagenes);
   }
   //////////////////////////////////////////
 
  ////Parte para agregar el inmueble
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
-  const [files, setFiles] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [portada, setPortada] = useState([]);
+  const [caractData, setCaractData] = useState({
+    banios : 0,
+    cantidadPersonas: 0,
+    habitaciones:0,
+    parrilla: 0,
+    piscina: 0,
+    tv:0,
+    wifi:0,
+  });
   const [nuevoInmuebleData, setNuevoInmuebleData] = useState({
     descripcion: "",
     fechaCreacion: currentDate,
-    parrilla: 0,
-    pileta: 0,
     precio: "",
     localidad: "",
     titulo:"",
     ubicacion:"",
   });
+  const [modalIdElim, setModalIdElim] = useState(null);
+
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value} = e.target;
     setNuevoInmuebleData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleInputChange2 = (e) => {
+    console.log(caractData)
+    const { name, value, type, checked } = e.target;
+    setCaractData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
     }));
   };
 
-  const handleFilesChange = (e) => {
-    setFiles(e.target.files);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    console.log("Agregando inmueble...");
+    postService.AgregarInmueble(nuevoInmuebleData)
+      .then((response) => {
+        console.log("Esperando 5 segundos...");
+        // Return a promise to wait for 5 seconds
+        return new Promise(resolve => setTimeout(resolve, 5000));
+      })
+      .then(() => {
+        console.log("Subiendo imágenes...");
+        return Promise.all([
+          postService.subirPortada(portada),
+          postService.subirImagen(selectedFiles),
+          postService.caractInm(caractData)
+        ]);
+      })
+      .then(() => {
+        setChComponent(!chComponent);
+      })
+      .catch((error) => {
+        console.error("Error al agregar el inmueble o cargar imágenes", error);
+      });
   };
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      
+  const DelInm = () => {
+    postService.DelInmueble(modalIdElim)
+    .then((response) => {
+      console.log("Inmueble Eliminado");
+      window.location.reload()
+    })
+    .catch((error) => {
+      console.error("Error al Eliminar", error);
+    });
+  }
   
-      console.log("Agregando inmueble...");
-      const response = await postService.AgregarInmueble(nuevoInmuebleData);
-  
-      // Manejar la respuesta si es necesario
-      console.log("Inmueble agregado exitosamente");
-      console.log(nuevoInmuebleData.id);
-  
-      // Esperar 5 segundos
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-        const IdInmueble = nuevoInmuebleData.id
-        console.log(IdInmueble)
-  
-      console.log("Subiendo imágenes...");
-      await postService.subirImagen(files, IdInmueble);
-  
-      // Manejar la carga de imágenes si es necesario
-      console.log("Imágenes cargadas exitosamente");
-      setChComponent(!chComponent);
-    } catch (error) {
-      // Manejar los errores de manera adecuada
-      console.error("Error al agregar el inmueble o cargar imágenes", error);
-    }
-  };
 //////////////////////////////////////////////////////////////////////
 
   return (
     <div className='contenedor'>
       <div className='cont-p' style={{ display: chComponent ? 'none' : 'block' }}>
         {/*  Si chComponent es true, el primer div se oculta (style={{ display: 'none' }}), y si es false, se muestra (style={{ display: 'block' }}).*/}
-        <h1>Estas son tus Publicaciones</h1>
-        <div className='mt-5'>
-          <p className='text-center'>Aún no has realizado ninguna publicación</p>
+        <h1 className='mb-5'>Estas son tus Publicaciones</h1>
+        {inmuebleData.length === 0 ? (
+          <div className=''>
+            <p className='text-center'>Aún no has realizado ninguna publicación</p>
+          </div>
+        ) : (
+          inmuebleData.map(inmueble =>(
+            <div className='mb-3' key={inmueble.id}>
+              <div className='row'>
+                <div className="card col-md-10 mb-3" style={{ cursor: "pointer" }}>
+                  <Link to={`/InmuebleHome/${inmueble.id}`} style={{ textDecoration: 'none' }}>
+                    <div className="row g-0">
+                      <div className="col-md-3 justify-content-start">
+                        <img src={`img/Portadas/${recortarUrl(inmueble.portada)}`} style={{ width: "100%", height: '8rem' }} className="img-fluid rounded-start" alt="" />
+                      </div>
+                      <div className="col-md-9">
+                        <div className="card-body">
+                          <h5 className="card-title" style={{ color: 'black' }}>{inmueble.titulo}</h5>
+                          <p className="card-text" style={{ color: 'black' }}>{inmueble.localidad}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+                <div className="d-flex col-md-2 justify-content-center" style={{flexDirection:"column"}}>
+                  <button className="btn btn-primary mx-1">Editar</button>
+                  <button className="btn btn-danger mx-1" data-bs-toggle="modal"
+                  data-bs-target="#exampleModal" onClick={() => setModalIdElim(inmueble.id)}>Eliminar</button>
+                </div>
+              </div>
+              {/* Modal */}
+              <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                  <div className="modal-content align-center text-center">
+                    <div className="modal-body">
+                      <h4 style={{color:"black"}}>¿Está Seguro de Eliminar su Inmueble? </h4>
+                      
+                    </div>
+                    <div className="modal-footer align-center"  style={{ justifyContent: "center" }}>
+                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                      </button>
+                      <button type="button" className="btn btn-danger" onClick={DelInm}>
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
           <button className='mt-2 btn-crearPost' onClick={toggleDiv}>
             <span>Crear publicación</span>
             <div className='icono-flecha' id="dub-arrow">
               <i className="fa-solid fa-arrow-right"></i>
             </div>
-          </button>
-        </div>
+        </button>
       </div>
-
-
-
+    
 
       {chComponent && (
         <div className='subir-casa cont-p'>
@@ -265,80 +451,106 @@ function Post_Casas() {
             <div className='mt-5'>
             <div className="form-group">
               <label for="email">Nombre de la Propiedad</label>
-              <input type="text" className="form-control" id="nombre" name="titulo" value={nuevoInmuebleData.titulo} onChange={handleInputChange}/>
+              <input type="text" style={{width:"100%"}} className="form-control" id="nombre" name="titulo" value={nuevoInmuebleData.titulo} onChange={handleInputChange} required/>
             </div>
             <br></br>
             <label>Características</label>
             <br></br>
-            <div className="form-check">
-              <div className="form-check-inline">
-                <input type="checkbox" name='pileta' checked={nuevoInmuebleData.pileta}  onChange={handleInputChange} className="form-check-input" id="pileta" />
-                <label className="form-check-label" name="pileta"  htmlFor="piscina">Piscina</label>
-              </div>
-              <div className="form-check-inline">
-                <input type="checkbox" name='parrilla' value={nuevoInmuebleData.parrilla === 1} onChange={handleInputChange} className="form-check-input" id="parrilla"/>
-                <label className="form-check-label" name="parrilla"  htmlFor="parrilla">Parrilla Incluida</label>
-              </div>
-              <div className="form-check-inline">
-                <input type="checkbox" className="form-check-input" />
-                <label className="form-check-label" for="parrilla">Wifi</label>
-              </div>
-              <div className="form-check-inline">
-                <input type="checkbox" className="form-check-input" />
-                <label className="form-check-label" for="parrilla">TV</label>
-              </div>
-              <div className="form-check-inline">
-                <input type="checkbox" className="form-check-input" />
-                <label className="form-check-label" for="parrilla">Salón de Fiestas</label>
-              </div>
-              <div className="form-check-inline">
-                <input type="checkbox" className="form-check-input" />
-                <label className="form-check-label" for="parrilla">Cancha de Futbol</label>
+             <div className="form-check">
+              <div id="app-cover">
+                <div class="row">
+                  <div class="col toggle-button-cover text-center" style={{alignItems:"center"}}>
+                    <div class="button-cover">
+                      <div class="button r" id="button-1">
+                        <input type="checkbox" class="checkbox" name='piscina' checked={caractData.piscina}  onChange={handleInputChange2} id="piscina"/>
+                        <div class="knobs"></div>
+                        <div class="layer"></div>
+                      </div>
+                    </div>
+                    <div style={{margin:"30px", paddingLeft:"30px"}}>
+                      <i style={{fontSize:"45px"}} className=" ml-2 fa-solid fa-person-swimming"></i>
+                    </div>
+                  </div>
+                  <div class="col toggle-button-cover text-center" style={{alignItems:"center"}}>
+                    <div class="button-cover">
+                      <div class="button r" id="button-1">
+                        <input type="checkbox" class="checkbox" name='parrilla' value={caractData.parrilla === 1} onChange={handleInputChange2} id="parrilla"/>
+                        <div class="knobs"></div>
+                        <div class="layer"></div>
+                      </div>
+                    </div>
+                    <div style={{margin:"30px", paddingLeft:"30px"}}>
+                      <p>Parrilla</p>
+                    </div>
+                  </div>
+                  <div class="col toggle-button-cover text-center" style={{alignItems:"center"}}>
+                    <div class="button-cover">
+                      <div class="button r" id="button-1">
+                        <input type="checkbox" class="checkbox" name='wifi' checked={caractData.wifi}  onChange={handleInputChange2} id="wifi"/>
+                        <div class="knobs"></div>
+                        <div class="layer"></div>
+                      </div>
+                    </div>
+                    <div style={{margin:"25px", paddingLeft:"30px"}}>
+                      <i style={{fontSize:"45px"}} className="fa-solid fa-wifi"></i>
+                    </div>
+                  </div>
+                  <div class="col toggle-button-cover text-center" style={{alignItems:"center"}}>
+                    <div class="button-cover">
+                      <div class="button r" id="button-1">
+                        <input type="checkbox" class="checkbox" name='tv' checked={caractData.tv}  onChange={handleInputChange2} id="tv"/>
+                        <div class="knobs"></div>
+                        <div class="layer"></div>
+                      </div>
+                    </div>
+                    <div style={{margin:"30px", paddingLeft:"30px"}}>
+                      <i style={{fontSize:"40px"}} class="fa-solid fa-tv"></i>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="form-group">
               <label for="habitaciones">Habitaciones</label>
               <div className="input-group">
-                <input type="number" className="form-control ml-3" id="habitaciones" name="numero" min="0" max="100" step="1"/>
+                <input type="number" className="form-control ml-3" value={caractData.habitaciones} id="habitaciones" onChange={handleInputChange2} name="habitaciones" min="0" max="100" step="1" required/>
               </div>
             </div>
 
             <div className="form-group">
               <label for="banos">Baños</label>
               <div className="input-group">
-                <input type="number" className="form-control ml-3" id="banos" name="numero" min="0" max="100" step="1"/>
+                <input type="number" className="form-control ml-3" value={caractData.banios} id="banios" onChange={handleInputChange2} name="banios" min="0" max="100" step="1" required/>
               </div>
             </div>
 
             <div className="form-group">
               <label for="personas">Cantidad de Personas</label>
               <div className="input-group">
-                <input type="number" className="form-control ml-3" id="personas" name="numero" min="0" max="100" step="1"/>
+                <input type="number" className="form-control ml-3" value={caractData.cantidadPersonas} id="cantidadPersonas" onChange={handleInputChange2} name="cantidadPersonas" min="0" max="100" step="1" required/>
               </div>
             </div>
+
             Ubicación
               <div className="form-row border border-white p-1">
-                <div className="col">
-                  <input type="text" className="form-control" placeholder="Provincia"/>
+                <div style={{width:"50%"}}>
+                  <input style={{width:"90%"}} type="text" className="form-control" required placeholder="Provincia" name='localidad' onChange={handleInputChange} value={nuevoInmuebleData.localidad}/>
                 </div>
-                <div className="col">
-                  <input type="text" className="form-control" placeholder="Departamento" name='localidad' onChange={handleInputChange} value={nuevoInmuebleData.localidad}/>
-                </div>
-                <div className="col">
-                  <input type="text" className="form-control" placeholder="Dirección" name='ubicacion' onChange={handleInputChange} value={nuevoInmuebleData.ubicacion}/>
+                <div style={{width:"50%"}}>
+                  <input style={{width:"90%"}} type="text" className="form-control" required placeholder="Dirección" name='ubicacion' onChange={handleInputChange} value={nuevoInmuebleData.ubicacion}/>
                 </div>
               </div>
             </div>
             <br></br>
             <div className="form-group">
               <label for="exampleFormControlTextarea1">Descripción</label>
-              <textarea className="form-control" name="descripcion" value={nuevoInmuebleData.descripcion} onChange={handleInputChange} id="exampleFormControlTextarea1" rows="10"></textarea>
+              <textarea className="form-control" required name="descripcion" value={nuevoInmuebleData.descripcion} onChange={handleInputChange} id="exampleFormControlTextarea1" rows="10"></textarea>
             </div>
             <br></br>
             <div className="form-group">
             <label className="form-label" for="customFile">Seleccione la portada</label>
             <input type="file" className="form-control" id="customFile" accept="image/*"  onChange={handleImageChange}/>
             {selectedImage && (
-              <div className="card card-prev" style={{width: '18rem'}}>
+              <div className="card card-prev mt-4 ml-2 mr-3" style={{width: '15rem'}}>
                 <img
                   className='prev-img'
                   src={selectedImage}
@@ -351,19 +563,19 @@ function Post_Casas() {
             </div>
             <div className="form-group">
               <label className="form-label" for="customFile">Seleccione las fotos</label>
-              <input type="file" className="form-control" id="customFile" multiple accept="image/*"  onChange={handleFilesChange}/>
+              <input type="file" className="form-control" id="customFile" multiple accept="image/*"  onChange={handleImageChange2}/>
               <div className='row'>
               {selectedImage2.map((image, index) => (
-          <div className="card card-prev" style={{width: '15rem'}} key={index}>
-            <img
-              className="prev-img"
-              src={image}
-              alt={`Preview ${index + 1}`}
-              style={{ width: '100%' , height: '15rem'}}
-              onClick={() => EliminarFoto(index)} // Handle click on the image
-            />
-            <i className="bi bi-trash"></i>
-          </div>))}
+              <div className="card card-prev mt-4 ml-4 mr-4" style={{width: '15rem'}} key={index}>
+                <img
+                  className="prev-img"
+                  src={image}
+                  alt={`Preview ${index + 1}`}
+                  style={{ width: '100%' , height: '15rem'}}
+                  onClick={() => EliminarFoto(index)} // Handle click on the image
+                />
+                <i className="bi bi-trash"></i>
+              </div>))}
               </div>
               
       
@@ -376,15 +588,15 @@ function Post_Casas() {
                 <option>Por día</option>
                 <option>Por hora</option>
               </select>
-              <input type="text" name='precio' value={nuevoInmuebleData.precio} onChange={handleInputChange} className="form-control"/>
+              <input type="text" name='precio' required value={nuevoInmuebleData.precio} onChange={handleInputChange} className="form-control"/>
             </div>
 
-              <button type='submit' className='mt-2 btn-crearPost'>
+            <button type='submit' className='mt-2 btn-crearPost'>
                 <span>Crear publicación</span>
                 <div className='icono-flecha' id="dub-arrow">
                   <i className="fa-solid fa-arrow-right"></i>
                 </div>
-              </button>
+            </button>
             </div>
           </form>
           
@@ -393,5 +605,10 @@ function Post_Casas() {
     </div>
   );
 }
+
+
+
+
+
 
 export default Perfil;

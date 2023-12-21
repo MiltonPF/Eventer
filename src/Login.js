@@ -5,28 +5,52 @@ import authService from './service/auth-service';
 import postService from './service/post-service';
 
 export function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    firstname: "",
+    lastname: "",
+  });
 
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      authService.login(email, password).then(
-        () => {
-          postService.GetUsuario()
+        setIsLoading(true)
+        await authService.login(formData.email, formData.password);
+        await new Promise(resolve => setTimeout(resolve, 3000));
           window.location.reload();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
     } catch (err) {
-      console.log(err);
+        console.log(err);
+    }
+    finally {
+      setIsLoading(false);
+    }
+};
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      await authService.signup(formData.firstname, formData.lastname, formData.email, formData.password);
+      await new Promise(resolve => setTimeout(resolve, 3000));
+        window.location.reload();
+    } catch (err) {
+    }
+    finally {
+      setIsLoading(false);
     }
   };
-
 
   const [showLoginForm, setShowLoginForm] = useState(true);
 
@@ -37,8 +61,6 @@ export function Login() {
   const handleRegisterForm = () => {
     setShowLoginForm(false);
   };
-
-
 
   return ( 
     <div>
@@ -57,8 +79,8 @@ export function Login() {
                   className="input-login"
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  onChange={handleChange}
                   required
                 />
                 <label htmlFor="email" className="email-label">
@@ -69,37 +91,63 @@ export function Login() {
                 <input
                   className="input-login"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  onChange={handleChange}
                   required
                 />
                 <label htmlFor="password" className="email-label">
                   Contraseña
                 </label>
               </div>
-              <button className="btn-login"  type="submit">Iniciar Sesión</button>
+              <button className={`btn-login ${isLoading ? 'disabled' : ''}`} disabled={isLoading} type="submit">
+                {isLoading ? (
+                  <>
+                    Cargando... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  </>
+                ) : (
+                  <>
+                    Iniciar Sesión
+                  </>
+                )}
+                </button>
               <p className="login-link">¿No tienes una cuenta? <a href="#" onClick={handleRegisterForm}>Registrar</a></p>
             </form>
           </div>
-  
+                  
           <div className="register-container">
-            <form className="form-container">
+            <form className="form-container" onSubmit={handleRegister}>
               <h2>Registrarse</h2>
               <div class='input-container'>
                  <input
                   className="input-login"
                   type="text"
-                  id="name"
+                  id="firstname"
+                  name="firstname"
+                  onChange={handleChange}
                   required
                 />
                 <label htmlFor="name" className="email-label">
                   Nombre                  </label>
-                </div>
+              </div>
+              <div class='input-container'>
+                 <input
+                  className="input-login"
+                  type="text"
+                  id="lastname"
+                  name="lastname"
+                  onChange={handleChange}
+                  required
+                />
+                <label htmlFor="name" className="email-label">
+                  Apellido</label>
+              </div>
               <div class='input-container'>
                 <input
                   className="input-login"
                   type="email"
                   id="email"
+                  name="email"
+                  onChange={handleChange} 
                   required
                 />
                 <label htmlFor="email" className="email-label">
@@ -111,13 +159,25 @@ export function Login() {
                     className="input-login"
                     type="password"
                     id="password"
+                    name="password"
+                    onChange={handleChange}
                     required
                   />
                   <label htmlFor="password" className="email-label">
                     Contraseña
                   </label>
                 </div>
-                <button className="btn-login" type="submit">Registrarse</button>
+                <button className={`btn-login ${isLoading ? 'disabled' : ''}`} disabled={isLoading} type="submit">
+                {isLoading ? (
+                  <>
+                    Cargando... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  </>
+                ) : (
+                  <>
+                    Registrarse
+                  </>
+                )}
+                </button>
                 <p className="login-link">¿Ya tienes una cuenta? <a href="#" onClick={handleLoginForm}>Iniciar Sesión</a></p>
               </form>
             </div>

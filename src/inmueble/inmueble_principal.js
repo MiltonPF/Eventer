@@ -42,49 +42,72 @@ export function InmuebleHome() {
     window.scrollTo(0, 0);
   };
   const [inmuebleData, setInmuebleData] = useState({});
+  const [inmuebleCalif, setInmuebleCalif] = useState({});
+
+  function recortarUrl(url) {
+    if (!url) {
+      return null;
+    }
+    const imagenCadena = JSON.stringify(url);
+    const partes = imagenCadena.split('\\');
+    const ultimaPalabra = partes[partes.length - 1];
+    const resultadoSinComillas = ultimaPalabra.replace(/["']/g, '');
+    console.log(inmuebleCalif)
+    return resultadoSinComillas;
+  }
   
   useEffect(() => {
-    scrollToTop();
-    if (inmuebleId != null) {
-      postService.getInmueble(inmuebleId).then(
-        (response) => {
-          setInmuebleData(response.data);
-        },
-        (error) => {
-          console.log(error);
+    const fetchData = async () => {
+      try {
+        scrollToTop();
+        if (inmuebleId != null) {
+          const inmuebleResponse = await postService.getInmueble(inmuebleId);
+          setInmuebleData(inmuebleResponse.data);
+  
+          const calificacionResponse = await postService.calificacionInm(inmuebleId);
+          setInmuebleCalif(calificacionResponse)
+        } else {
+          console.log("Error al hacerlo");
         }
-      );
-    } else {
-      console.log("error al hacerlo")
-    }
-    // Llama a la función getInmueble pasando el inmuebleId
-    
-   
-  }, []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [inmuebleId]);
+  
 
     return(
-        <div className="container">
-            <div>
-                <h1 style={{ color: 'white' }}>
-                    {inmuebleData.nombre} 
+        <div className="container" style={{backgroundColor: "#eee9f2", paddingTop:"3px"}}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <h1 style={{ color: '', marginLeft:"10em" }}>
+                    {inmuebleData.titulo} 
+                </h1>
+                <h1 style={{ color: ''}}>
+                  {Math.round(inmuebleCalif.data)}<i class="fa-solid fa-star" style={{color:"#ffd500"}}></i>
                 </h1>
             </div>
             <div id="carouselExampleIndicators" class="carousel slide mt-3" data-ride="carousel">
                 <ol className="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                  {inmuebleData.filePath?.map((image, index) => (
+                    <li
+                      key={index}
+                      data-target="#carouselExampleIndicators"
+                      data-slide-to={index}
+                      className={index === 0 ? 'active' : ''}
+                    ></li>
+                  ))}
                 </ol>
                 <div className="carousel-inner">
-                    <div className="carousel-item active">
-                    <img className="d-block w-100 imgSlider" style={{ height: "25rem" }} alt="First slide"/>
-                    </div>
-                    <div className="carousel-item">
-                    <img className="d-block w-100 imgSlider" style={{ height: "25rem" }} alt="Second slide"/>
-                    </div>
-                    <div className="carousel-item">
-                    <img className="d-block w-100 imgSlider" style={{ height: "25rem" }} alt="Third slide"/>
-                    </div>
+                  {inmuebleData.filePath?.length > 0 ? (
+                    inmuebleData.filePath.map((image, index) => (
+                      <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                        <img className="d-block w-100" style={{ height: "25rem"}} src={`../img/${(recortarUrl(image))}`} alt={`Imagen ${index + 1}`} />
+                      </div>
+                    ))
+                  ) : (
+                    <div>No hay imágenes cargadas</div>
+                  )}
                 </div>
                 <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -95,27 +118,72 @@ export function InmuebleHome() {
                     <span className="sr-only">Next</span>
                 </a>
             </div>
-            <div className='container'>
-                <div className="row mt-3 text-center">
-                    <div className="columna-c col p-2">
-                        Example <i className=" ml-2 fa-solid fa-person-swimming"></i>
-                    </div>
-                    <div className="columna-c col p-2">
-                        Example <i class="ml-2 bi bi-arrows-angle-expand"></i>
-                    </div>
-                    <div className="columna-c col p-2">
-                        Example <i class="ml-2 bi bi-wifi"></i>
-                    </div>
-                    <div className="columna-c col p-2">
-                        Example <i class="ml-2 bi bi-people"></i>
+            <div className='mt-3 ml-3'>
+              {inmuebleData.filePath?.length > 0 ? (
+                inmuebleData.filePath.map((image, index) => (
+                  <div className='img-Container' key={index} style={{backgroundColor: "#000"}}>
+                    <img style={{ width: "100%", height: "5rem" }} src={`../img/${(recortarUrl(image))}`} alt={`Imagen ${index + 1}`} />
+                  </div>
+                ))
+              ) : (
+                <div>No hay imágenes cargadas</div>
+              )}
+            </div>
+            <div className='container mt-4'>
+                <h3 className='text-center'>Características y Datos</h3>
+                <div>
+                  <div className="row mt-3 text-center" >
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i className=" ml-2 fa-solid fa-person-swimming"></i>
+                      </div>
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i class="ml-2 bi bi-arrows-angle-expand"></i>
+                      </div>
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i class="ml-2 bi bi-wifi"></i>
+                      </div>
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i class="ml-2 bi bi-people"></i>
+                      </div>
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i class="ml-2 bi bi-people"></i>
+                      </div>
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i class="ml-2 bi bi-people"></i>
+                      </div>
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i class="ml-2 bi bi-people"></i>
+                      </div>
+                      <div className="columna-c col-12 col-md-6 col-lg-2 p-2">
+                          Example <i class="ml-2 bi bi-people"></i>
+                      </div>
+                  </div>
+                </div>
+                
+                <div className='text-center'>
+                  <p className='mt-2' style={{fontSize:"20px"}}>Ubicación : {inmuebleData.localidad}, {inmuebleData.ubicacion}</p>
+                  <div id="mapa" style={{ height:"100%" }}>
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13155.683357341622!2d-58.54236660285917!3d-34.47953236944883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcb03cd891437f%3A0xab3b49e671350275!2sSan%20Isidro%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1699929341707!5m2!1ses-419!2sar"
+                        width="600"
+                        height="250"
+                        style={{ border: 0 }}
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                      ></iframe>
                     </div>
                 </div>
             </div>
-            <div>
-                <h3 className="mt-3 text-white">Descripción</h3>
-                <p className="mt-3 text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultrices gravida dictum fusce ut placerat. Vestibulum sed arcu non odio euismod lacinia at. Quis hendrerit dolor magna eget est lorem ipsum dolor. Eros donec ac odio tempor orci. Eget mauris pharetra et ultrices neque ornare. Laoreet non curabitur gravida arcu ac tortor dignissim convallis. Sed turpis tincidunt id aliquet risus feugiat in. Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Tincidunt id aliquet risus feugiat in ante. Tortor condimentum lacinia quis vel eros. Vitae sapien pellentesque habitant morbi tristique senectus et netus. Sed ullamcorper morbi tincidunt </p>
-                <p className='mt-4 text-white'>ornare massa eget. Eu non diam phasellus vestibulum lorem sed risus ultricies tristique. Duis tristique sollicitudin nibh sit amet commodo nulla. Porttitor rhoncus dolor purus non. Nunc scelerisque viverra mauris in aliquam sem fringilla ut. Mauris augue neque gravida in. Scelerisque in dictum non consectetur a erat nam at. Consequat interdum varius sit amet mattis vulputate enim nulla aliquet.</p>
-                <p className='mt-4 text-white'>Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Tincidunt id aliquet risus feugiat in ante. Tortor condimentum lacinia quis vel eros. Vitae sapien pellentesque habitant morbi tristique senectus et netus. Sed ullamcorper morbi tincidunt</p>
+            <div className='mt-5 text-center' style={{display:"flex"}}>
+              <div className='owner-cont' style={{width:"90rem",height:"20rem", border:"2px solid"}}>
+                  <h3 className="mt-3 text-">Datos del Propietario</h3>
+                  <p className="mt-4 text-">Nombre del Usuario: {inmuebleData.nombreUsuario}</p>
+              </div>
+              <div className='ml-3' style={{minWidth: "673px",}}>
+                  <h3 className="mt-3 text-">Descripción</h3>
+                  <p className="mt-3 text-">{inmuebleData.descripcion}</p>
+              </div>
             </div>
         </div>
     )
@@ -125,7 +193,9 @@ export function InmuebleHome() {
 export function SeccionComentarios() {
   const location = useLocation();
   const {inmuebleId} = useParams()
-
+  const [valoracion, setValoracion] = useState({
+    calificacion: 1,
+  });
 
   const [comentario, setComentario] = useState({
     contenido: '',
@@ -142,43 +212,44 @@ export function SeccionComentarios() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    postService
-      .agregarComentario(comentario, inmuebleId)
-      .then((response) => {
-        console.log('Comentario agregado exitosamente');
-        setComentario({ contenido: '' });
-        setTimeout(() => {
-          setActualizarComentarios(!actualizarComentarios);
-          setIsLoading(false);
-        }, 4000);
-      })
-      .catch((error) => {
-        console.error('Error al agregar el comentario', error);
-      });
+  
+    try {
+      const [comentarioResponse, calificacionResponse] = await Promise.all([
+        postService.agregarComentario(comentario, inmuebleId),
+        postService.calificacion(valoracion, inmuebleId)
+      ]);
+      console.log('Comentario agregado exitosamente', comentarioResponse);
+      setComentario({ contenido: '' });
+      setTimeout(() => {
+        setActualizarComentarios(!actualizarComentarios);
+        setIsLoading(false);
+      }, 4000);
+    } catch (error) {
+      console.error('Error al agregar el comentario o la calificación', error);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     postService.GetComentario(inmuebleId)
       .then((response) => {
         setComentarios(response.data);
-        console.log(response);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [inmuebleId, actualizarComentarios]); // Agregamos actualizarComentarios como dependencia
+  }, [inmuebleId, actualizarComentarios]); 
 
   return (
-    <div className="container">
-      <div className="contenedor-com text-white">
+    <div className="container" style={{backgroundColor: "#eee9f2",display: "inline-block"}}>
+      <div className="contenedor-com text-">
         <h3>Comentarios</h3>
-        <form className="mt-4" onSubmit={handleSubmit}>
+        <form style={{paddingBottom:"2em"}} className="mt-4" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="contenido text-white">Deja tu Comentario:</label>
+            <label htmlFor="contenido text-">Deja tu Comentario:</label>
             <textarea
               className="form-control"
               name="contenido"
@@ -187,6 +258,23 @@ export function SeccionComentarios() {
               onChange={handleInputChange}
               rows="3"
             ></textarea>
+          </div>
+          <div className='container-stars' style={{display:"flex", alignItems:"center"}}>
+            <p className='mr-3'>VALORACION (debe dar almenos una estrella): </p>
+              <span id="estrellas">
+                <p class="clasificacion">
+                  <input id="radio1" type="radio" name="estrellas" value="5" onChange={() => setValoracion(5)}/>
+                  <label for="radio1">&#9733;</label>
+                  <input id="radio2" type="radio" name="estrellas" value="4" onChange={() => setValoracion(4)}/>
+                  <label for="radio2">&#9733;</label>
+                  <input id="radio3" type="radio" name="estrellas" value="3" onChange={() => setValoracion(3)}/>
+                  <label for="radio3">&#9733;</label>
+                  <input id="radio4" type="radio" name="estrellas" value="2" onChange={() => setValoracion(2)}/>
+                  <label for="radio4">&#9733;</label>
+                  <input id="radio5" type="radio" name="estrellas" value="1" onChange={() => setValoracion(1)} required/>
+                  <label for="radio5">&#9733;</label>
+                </p>
+              </span>     
           </div>
           <button type="submit" id="load1" className={`btn ${isLoading ? 'disabled' : ''} btn-primary`} disabled={isLoading}>
             {isLoading ? (
@@ -199,18 +287,25 @@ export function SeccionComentarios() {
           </button>
         </form>
         {comentarios && comentarios.content && comentarios.content.length > 0 ? (
-          comentarios.content.map((comentario, index) => (
-            <div key={index} className="mt-4 mb-4">
-              <div className="media mt-2">
-                <div className="media-body">
-                  <h6 className="mt-0" style={{ fontSize: '15px' }}>
-                    <i className="bi bi-person-circle text-white"></i> {comentario.nombreUsuario}
-                  </h6>
-                  <p className='text-white'>{comentario.contenido}</p>
+          <ul style={{ listStyleType: 'none', borderTop:"2px solid" }}>
+            {comentarios.content.map((comentario, index) => (
+              <li key={index} style={{ display: 'flex', alignItems: 'center', marginLeft:"2em", paddingBottom:"2em"}}>
+                <i className="bi bi-person-circle" style={{ fontSize: '25px' }}></i>
+                <div className="comment-box">
+                  <form id="miFormulario" method="post" action="URL_PARA_ELIMINAR_COMENTARIO">
+                    <div className="comment-head">
+                      <strong>{comentario.nombreUsuario}</strong>
+                      {/* {<button type="submit"><i className="bi bi-trash"></i></button>} */}
+                    </div>
+                    <div className="comment-content">
+                      {comentario.contenido}
+                      <input type="hidden" name="comentario_id" value={comentario.id} />
+                    </div>
+                  </form>
                 </div>
-              </div>
-            </div>
-          ))
+              </li>
+            ))}
+          </ul>
         ) : (
           <div className="mt-4 mb-4">No hay comentarios</div>
         )}

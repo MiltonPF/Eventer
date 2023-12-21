@@ -10,13 +10,6 @@ import Slider4 from './imgHome/Slider4.jpeg';
 import { Link } from 'react-router-dom';
 
 
-function obtenerNombreImagen(rutaCompleta) {
-  const partesRuta = rutaCompleta.split('/');
-  const nombreArchivo = partesRuta.pop();
-  const nombreImagenConExtension = nombreArchivo.substring(nombreArchivo.lastIndexOf('/') + 1)
-  return nombreImagenConExtension;
-}
-
 
 export function Slider() {
   return (
@@ -28,13 +21,13 @@ export function Slider() {
   </ol>
   <div className="carousel-inner">
     <div className="carousel-item active">
-      <img className="d-block w-100" src={Slider1} style={{ height: "20rem" }} alt="First slide"/>
+      <img className="d-block w-100" src={Slider1} style={{ height: "40rem" }} alt="First slide"/>
     </div>
     <div className="carousel-item">
-      <img className="d-block w-100" src={Slider2}  style={{ height: "20rem" }} alt="Second slide"/>
+      <img className="d-block w-100" src={Slider2}  style={{ height: "40rem" }} alt="Second slide"/>
     </div>
     <div className="carousel-item">
-      <img className="d-block w-100" src={Slider4} style={{ height: "20rem" }} alt="Third slide"/>
+      <img className="d-block w-100" src={Slider4} style={{ height: "40rem" }} alt="Third slide"/>
     </div>
   </div>
   <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -54,6 +47,12 @@ export function Cards(idInmueble) {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [inmuebles, setInmuebles] = useState([]);
+  const [mostrarTarjetas, setMostrarTarjetas] = useState(true);
+
+  const toggleTarjetas = () => {
+    setMostrarTarjetas(!mostrarTarjetas);
+  };
+  
 
   useEffect(() => {
     postService.getAllInmuebles().then(
@@ -68,47 +67,132 @@ export function Cards(idInmueble) {
   }, []);
 
   function recortarUrl(url) {
+    if (!url) {
+      return null;
+    }
     const imagenCadena = JSON.stringify(url);
-    const imagenR = imagenCadena.replace(/\\/g, "/");
-    const imagenR2 = imagenR.replace(/]/g, "");
-    const imagenRuta = imagenR2.replace(/\"/g, "");
-    return imagenRuta
+    const partes = imagenCadena.split('\\');
+    const ultimaPalabra = partes[partes.length - 1];
+    const resultadoSinComillas = ultimaPalabra.replace(/["']/g, '');
+    return resultadoSinComillas;
   }
 
   return (
     <div className="container-s">
-      <div className="row">
+      <div class="l-navbar mt-4" id="nav-bar">
+        <div>
+        <div style={{display:"flex"}}>
+          <i class="fa-solid fa-filter mt-1" style={{fontSize:"20px"}}></i><h4 style={{ color: 'black', marginLeft:"5%", paddingBottom:"10%" }}>Filtros</h4>
+        </div>
+        <button className='btn-viewCards btn btn-secondary mb-3' onClick={toggleTarjetas} style={{width: "100%", fontSize: "15px"}}>
+          {mostrarTarjetas ? <><i class="fa-solid fa-list"></i> Lista</> : <><i className="far fa-hard-drive"></i> Tarjetas</>}
+        </button>
+       </div>
+        <div >
+          <nav class="nav">
+            <div>
+              <div class="dropdown mb-5">
+                <button style={{width: "100%", fontSize: "15px"}} class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Ordenar por:
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Más reciente</a>
+                  <a class="dropdown-item" href="#">Mejor valorado</a>
+                </div>
+              </div>
+              <div class="nav_list" style={{borderTop:"1px solid"}}>
+                <h5 className='text-center mt-2'>Filtrar por</h5>
+                <div style={{borderBottom: "1px solid"}}>
+                    <input type="checkbox" style={{width: "1rem", height: "1rem", verticalAlign: "middle"}}/>
+                    <label className="ml-2 mt-2" style={{fontSize: "15px", verticalAlign: "middle"}}>Parrilla</label>
+                </div>  
+                <div style={{borderBottom: "1px solid"}}>
+                    <input type="checkbox" style={{width: "1rem", height: "1rem", verticalAlign: "middle"}}/>
+                    <label className="ml-2 mt-2" style={{fontSize: "15px", verticalAlign: "middle"}}>Piscina</label>
+                </div>  
+                <div style={{borderBottom: "1px solid"}}>
+                    <input type="checkbox" style={{width: "1rem", height: "1rem", verticalAlign: "middle"}}/>
+                    <label className="ml-2 mt-2" style={{fontSize: "15px", verticalAlign: "middle"}}>Wifi</label>
+                </div>  
+                <div style={{borderBottom: "1px solid"}}>
+                    <input type="checkbox" style={{width: "1rem", height: "1rem", verticalAlign: "middle"}}/>
+                    <label className="ml-2 mt-2" style={{fontSize: "15px", verticalAlign: "middle"}}>TV</label>
+                </div>
+              </div>
+              <button className='btn-viewCards btn btn-secondary mt-5' style={{width: "100%", fontSize: "15px"}}>
+                Filtrar
+              </button>
+              </div>
+            </nav>
+          </div>
+         <div>
+        </div>
+      </div>
+      {mostrarTarjetas ? (
+        <div className='container-cards mt-2 mr-3 ml-3' style={{width: "100%"}}>
+          {posts.length === 0 ? (
+            <div>Cargando...</div>
+          ) : (
+            posts.map(inmueble => (
+              <div className="col-12 col-md-6 col-lg-4" style={{display: "inline-block"}} key={inmueble.id}>
+                <div className="card card-home" style={{marginTop: "6%"}}>
+                  <Link to={`/InmuebleHome/${inmueble.id}`} style={{ textDecoration: 'none' }}>
+                    <img
+                      src={`img/Portadas/${recortarUrl(inmueble.portada)}`}
+                      style={{ height: '10rem' }}
+                      className="card-img-top"
+                      alt=""
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title" style={{ color: 'black' }}>
+                        {inmueble.titulo}
+                      </h5>
+                      <p className="card-text" style={{ color: 'black' }}>
+                        {inmueble.localidad}
+                      </p>
+                    </div>
+                    <ul className="list-group list-group-flush">
+                      <li className="list-group-item">
+                        <i className="fa-solid fa-person"></i> Max: {inmueble.cantidadPersonas}
+                      </li>
+                      <li className="list-group-item">
+                        <i className="fa-solid fa-door-open"></i> {inmueble.habitaciones} hab.
+                      </li>
+                    </ul>
+                  </Link>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      ) : (
+        
+        <div className='container-list mr-3 mt-4' style={{ width: "100%" }}>
         {posts.length === 0 ? (
           <div>Cargando...</div>
         ) : (
           posts.map(inmueble => (
-            <div className="col-12 col-md-6 col-lg-4" key={inmueble.id}>
-              <div className="card">
-               <Link to={`/InmuebleHome/${inmueble.id}`} style={{ textDecoration: 'none' }}>
-                  <img src={`img/${obtenerNombreImagen(recortarUrl(inmueble.filePath))}`} style={{ height: "10rem" }} className="card-img-top" alt="" />
-                  <div className="card-body">
-                    <h5 className="card-title"  style={{ color: 'black' }}>{inmueble.titulo}</h5>
-                    <p className="card-text"  style={{ color: 'black' }}>{inmueble.localidad}</p>
-                    {/*<p className="card-text">{inmueble.descripcion}</p> */}
+            <div className="col-12" key={inmueble.id}>
+              <div className="card card-home mr-4 ml-4">
+                <Link to={`/InmuebleHome/${inmueble.id}`} style={{ textDecoration: 'none' }}>
+                  <div className="row g-0">
+                    <div className="col-md-2">
+                      <img src={`img/Portadas/${recortarUrl(inmueble.portada)}`} style={{width: "100%", height: '8rem' }} className="img-fluid rounded-start" alt="" />
+                    </div>
+                    <div className="col-md-8">
+                      <div className="card-body">
+                        <h5 className="card-title" style={{ color: 'black' }}>{inmueble.titulo}</h5>
+                        <p className="card-text" style={{ color: 'black' }}>{inmueble.localidad}</p>
+                      </div>
+                    </div>
                   </div>
-                  <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                      <i className="fa-solid fa-person"></i> Max: 4
-                    </li>
-                    <li className="list-group-item">
-                      <i className="fa-solid fa-door-open"></i> 3 amb.
-                    </li>
-                    <li className="list-group-item">
-                      <i className="fa-solid fa-person-swimming"></i> NO
-                    </li>
-                  </ul>
                 </Link>
               </div>
             </div>
           ))
-          
         )}
       </div>
+    )}
     </div>
   );
 }

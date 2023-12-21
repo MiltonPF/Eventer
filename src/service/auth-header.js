@@ -4,6 +4,7 @@ export default function authHeader() {
   if (user && user.accessToken) {
     return { Authorization: 'Bearer ' + user.accessToken };
   } else {
+    console.error("User or access token not found in localStorage");
     return {};
   }
 }

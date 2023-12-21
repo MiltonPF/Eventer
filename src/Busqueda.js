@@ -1,54 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import postService from './service/post-service';
 
 function BuscarInmuebles() {
-  const [nombre, setNombre] = useState('');
-  const [resultados, setResultados] = useState([]);
-
-  const buscarInmuebles = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/inmueble/getAll');
-      const data = response.data;
-      const inmueblesFiltrados = data.filter((inmueble) => inmueble.nombre.includes(nombre));
-      setResultados(inmueblesFiltrados);
-    } catch (error) {
-      console.error('Error al buscar inmuebles:', error);
-    }
-  };
-
-  const handleChangeNombre = (event) => {
-    setNombre(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    buscarInmuebles();
-  };
-
-  return (
-    <div>
-      <h1>Buscar Inmuebles</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={nombre} onChange={handleChangeNombre} placeholder="Nombre del inmueble" />
-        <button type="submit">Buscar</button>
-      </form>
-      <div>
-        {resultados.length > 0 ? (
-          <ul>
-            {resultados.map((inmueble) => (
-              <li key={inmueble.id}>
-                <p>Nombre: {inmueble.nombre}</p>
-                <p>Descripcion: {inmueble.descripcion}</p>
-                {/* Mostrar más información del inmueble */}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No se encontraron resultados.</p>
-        )}
+    const [posts, setPosts] = useState([]);
+    const [val, setVal] = useState('');
+  
+    useEffect(() => {
+      postService.getAllInmuebles().then(
+        (response) => {
+          setPosts(response.data);
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }, []);
+  
+    const data = posts.map((post) => ({
+      titulo: post.titulo,
+      localidad: post.localidad,
+    }));
+  
+    return (
+      <div className="main">
+        <input list="data" onChange={(e) => setVal(e.target.value)} placeholder="Search" />
+        <datalist id="data">
+          {data.map((property, index) => (
+            <option key={index} value={`${property.titulo} - ${property.localidad}`} />
+          ))}
+        </datalist>
+  
+        <h1>{val}</h1>
       </div>
-    </div>
-  );
-}
-
-export default BuscarInmuebles;
+    );
+  }
+  
+  export default BuscarInmuebles;
