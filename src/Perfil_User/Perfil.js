@@ -408,7 +408,6 @@ function Post_Casas() {
                   </Link>
                 </div>
                 <div className="d-flex col-md-2 justify-content-center" style={{flexDirection:"column"}}>
-                  <button className="btn btn-primary mx-1">Editar</button>
                   <button className="btn btn-danger mx-1" data-bs-toggle="modal"
                   data-bs-target="#exampleModal" onClick={() => setModalIdElim(inmueble.id)}>Eliminar</button>
                 </div>

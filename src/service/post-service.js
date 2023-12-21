@@ -9,8 +9,16 @@ const inmueblePost = "http://localhost:8080/api/inmueble/user";
 const email = Sesion_Usuario();
 
 
-const getAllInmuebles = () => {
-  return axios.get(inmgetAllurl);
+const getAllInmuebles = (page, size) => {
+  try{
+    const params = { page, size }
+    return axios.get(inmgetAllurl ,{
+      params: params,
+    })
+  }catch (error){
+    console.error('error al traer inmuebles', error);
+  }
+  
 };
 
 const AgregarInmueble = async (nuevoInmuebleData) => {

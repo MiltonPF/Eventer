@@ -48,23 +48,23 @@ export function Cards(idInmueble) {
   const [posts, setPosts] = useState([]);
   const [inmuebles, setInmuebles] = useState([]);
   const [mostrarTarjetas, setMostrarTarjetas] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const postsPerPage = 10;
 
   const toggleTarjetas = () => {
     setMostrarTarjetas(!mostrarTarjetas);
   };
   
-
   useEffect(() => {
-    postService.getAllInmuebles().then(
+    postService.getAllInmuebles(currentPage, postsPerPage).then(
       (response) => {
         setPosts(response.data);
-        console.log(response)
       },
       (error) => {
         console.log(error);
       }
     );
-  }, []);
+  }, [currentPage]);
 
   function recortarUrl(url) {
     if (!url) {
@@ -77,8 +77,16 @@ export function Cards(idInmueble) {
     return resultadoSinComillas;
   }
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo(0, 0); 
+  };
+
+
+
   return (
-    <div className="container-s">
+    <div>
+      <div className="container-s">
       <div class="l-navbar mt-4" id="nav-bar">
         <div>
         <div style={{display:"flex"}}>
@@ -193,6 +201,24 @@ export function Cards(idInmueble) {
         )}
       </div>
     )}
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul className="pagination mt-4" style={{ justifyContent: "center" }}>
+          <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+          </li>
+          
+          {[...Array(Math.ceil(posts.length / 5)).keys()].map((number) => (
+            <li key={number + 1} className={`page-item ${currentPage === number + 1 ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(number + 1)}>{number + 1}</button>
+            </li>
+          ))}
+          {console.log([...Array(Math.ceil(posts.length / 5)).keys()])}
+          <li className={`page-item ${currentPage === Math.ceil(posts.length / 5) ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 }

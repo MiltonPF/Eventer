@@ -27,6 +27,7 @@ function App() {
           <>
             <Route path="/Perfil" element={<><NavBar /><Perfil /></>} />
             <Route path="/Perfil_agregarInmueble" element={<><NavBar /><AgregarInmuebleForm /></>} />
+            <Route path="/InmuebleHome/:inmuebleId"/>
           </>
         ) : (
           // Redirect to "/" if there is no valid token
